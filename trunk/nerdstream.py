@@ -20,7 +20,7 @@ def createDaemon():
 	except OSError, error:
 		print 'fork #2 failed: %d (%s)' % (error.errno, error.strerror)
 		os._exit(1)
-	take_picture(5)
+	take_picture(600)		# 600 ms = 5 minutes
 
 def take_picture(sleep_time):
 	while True:
