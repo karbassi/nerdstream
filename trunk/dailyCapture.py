@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # encoding: utf-8
 """
-dailyCapture.py
+nerdstream.py
 
 Created by Ali Karbassi on 2008-07-01.
 Copyright (c) 2008 Ali Karbassi. All rights reserved.
@@ -27,9 +27,9 @@ def take_picture(sleep_time):
 
 	while True:
 		if int(strftime("%M")) % 5 == 0:
-			datetime = strftime("%Y%m%dT%H%M%S")
-			filename = username + "-" + datetime
-			subprocess.call("./isightcapture -n 10 " + username + "/" + filename + ".jpg", shell=True)
+			datetime = strftime("%Y%m%dT%H%M")
+			filename = username + '/' + datetime + '.jpg'
+			subprocess.call("./isightcapture " + filename, shell=True)
 			time.sleep(sleep_time)
 		else:
 			time.sleep(30)
