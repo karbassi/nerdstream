@@ -16,18 +16,19 @@ def createDaemon():
 		pid = os.fork()
 		if pid > 0:
 			print 'Daemon PID %d' % pid
+			print 'Updating every ' + str(config['update every']) + ' minute(s).'
 			os._exit(0)
 	except OSError, error:
-		print 'fork #2 failed: %d (%s)' % (error.errno, error.strerror)
+		print 'Failed: %d (%s)' % (error.errno, error.strerror)
 		os._exit(1)
 	loop()
 
 def loop():
 	while True:
 		if int(strftime("%H%M")) > int(config['start time']) and int(strftime("%H%M")) < int(config['end time']):
-			if int(strftime("%M")) % (int(config['update every']) / 60) == 0:
+			if int(strftime("%M")) % config['update every'] == 0:
 				take_picture()
-				time.sleep(float(config['update every']) - 1) # minus one for sake of not matching over previous
+				time.sleep(50) # minus one for sake of not matching over previous
 			else:
 				time.sleep(50) #sleep 50 seconds
 		else:
@@ -48,7 +49,7 @@ def ftp_image(filename):
 	os.chdir(new_dir)
 	
 	# FTP Upload
-	ftp = FTP("yankee.sierrabravo.net")
+	ftp = FTP(config['host'])
 	ftp.login(config['username'], config['password'])
 	
 	for directory in config['ftp dir'].split('/'):
@@ -94,13 +95,15 @@ def open_config(file):
 		nc['local dir'] = nc['local dir'].rstrip("/")
 	if nc['ftp dir'].endswith("/"):
 		nc['ftp dir'] = nc['ftp dir'].rstrip("/")
+		
+	# Change timer var from minutes to seconds
+	nc['update every'] = int(nc['update every']) # * 60
 
 	
 	return nc
 
 if __name__ == '__main__':
 	config = open_config('config.ini')
-	
 	if not os.path.exists(config['local dir']):
 		os.makedirs(config['local dir'])
 	createDaemon()
