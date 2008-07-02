@@ -11,7 +11,7 @@ delete local: false
 [time]
 start time: 0730
 end time: 1800
-update every: 60
+update every: 300
 
 [information]
 name:
