@@ -1,0 +1,3 @@
+* Cocoa App
+* Time check for day of week
+* Create config via Cocoa App
