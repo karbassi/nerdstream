@@ -1,12 +1,18 @@
 [ftp]
 host: 
 username: 
-password:
-directory:
+password: 
+ftp dir: public_html/nerdstream
 
-[general]
-update_every:
+[local]
+local dir: shots/
+delete local: false
+
+[time]
+start time: 0730
+end time: 1800
+update every: 60
 
 [information]
-name: 
-title: 
+name:
+title:
