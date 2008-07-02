@@ -35,7 +35,7 @@ def loop():
 
 def take_picture():
 	datetime = strftime("%Y%m%dT%H%M")
-	filename = config['localdir'] + '/' + datetime + '.jpg'
+	filename = config['local dir'] + '/' + datetime + '.jpg'
 	subprocess.call("./isightcapture " + filename, shell=True)
 	time.sleep(1)
 	ftp_image(filename)
@@ -102,5 +102,5 @@ if __name__ == '__main__':
 	config = open_config('config.ini')
 	
 	if not os.path.exists(config['local dir']):
-		os.mkdir(config['local dir'])
+		os.makedirs(config['local dir'])
 	createDaemon()
