@@ -72,7 +72,7 @@ def ftp_image(filename):
 
 def open_config(file):
 	if not os.path.exists(file):
-		print "'" + file + ".ini' file does not exist. Copy over '" + file + "-dist'."
+		print "'" + file + "' file does not exist. Copy over '" + file + "-dist'."
 		sys.exit();
 	
 	c = ConfigParser.ConfigParser()
