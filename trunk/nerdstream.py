@@ -7,7 +7,7 @@ Created by Ali Karbassi on 2008-07-01.
 Copyright (c) 2008 Ali Karbassi. All rights reserved.
 """
 
-import time, sys, os, subprocess, threading, ConfigParser, string
+import time, sys, os, shutil, subprocess, threading, ConfigParser, string
 from time import strftime
 from ftplib import FTP
 
@@ -21,6 +21,11 @@ def createDaemon():
 	except OSError, error:
 		print 'Failed: %d (%s)' % (error.errno, error.strerror)
 		os._exit(1)
+	
+	# Remove from the parent
+	os.setsid()
+	os.umask(0)
+	
 	loop()
 
 def loop():
@@ -34,13 +39,18 @@ def loop():
 		else:
 			time.sleep(50) #sleep 50 seconds
 
+def create_latest(file):
+	latest_file = config['local dir'] + '/latest.jpg'
+	shutil.copy(file, latest_file)
+	ftp_image(latest_file)
+
 def take_picture():
 	datetime = strftime("%Y%m%dT%H%M")
 	filename = config['local dir'] + '/' + datetime + '.jpg'
 	subprocess.call("./isightcapture " + filename, shell=True)
 	time.sleep(1)
+	create_latest(filename)
 	ftp_image(filename)
-
 
 def ftp_image(filename):
 	new_dir = os.path.dirname(filename)
@@ -70,24 +80,23 @@ def ftp_image(filename):
 	# Move back to old dir so the script will continue to run
 	os.chdir(old_dir)
 
-def open_config(file):
+def configuration(file):
 	if not os.path.exists(file):
-		print "'" + file + "' file does not exist. Copy over '" + file + "-dist'."
-		sys.exit();
+		create_config(file)
+	else:
+		return open_config(file)
+
+def open_config(file):
+	fc = ConfigParser.ConfigParser()
+	fc.read(file)
 	
-	c = ConfigParser.ConfigParser()
-	c.read(file)
-	
-	config = c.items("ftp")
-	config += c.items("local")
-	config += c.items("time")
-	config += c.items("information")
+	c = fc.items("ftp")
+	c += fc.items("local")
+	c += fc.items("time")
+	c += fc.items("information")
 	
 	nc = {}
-	for var in config:
-		if var[1] == '':
-			print 'Please fill out config.ini'
-			sys.exit()
+	for var in c:
 		nc[ var[0] ] = var[1]
 	
 	# Checking for trailing slash
@@ -95,15 +104,56 @@ def open_config(file):
 		nc['local dir'] = nc['local dir'].rstrip("/")
 	if nc['ftp dir'].endswith("/"):
 		nc['ftp dir'] = nc['ftp dir'].rstrip("/")
-		
+	
 	# Change timer var from minutes to seconds
-	nc['update every'] = int(nc['update every']) # * 60
-
+	nc['update every'] = int(nc['update every'])
 	
 	return nc
 
-if __name__ == '__main__':
-	config = open_config('config.ini')
+def create_config(file):
+	config = {
+				'ftp' : {'host' : 'yankee.sierrabravo.net', 'ftp dir' : 'public_html/nerdstream/', 'username' : '', 'password' : ''},
+				'local' : {'local dir' : 'shots/', 'delete local' : 'false'},
+				'time' : {'start time' : '0730', 'end time' : '1800', 'update every' : '1'},
+				'information' : {'name' : '', 'job title' : ''}
+				}
+	
+	# FTP Information
+	config['ftp']['host'] = raw_input("FTP Host ['" + config['ftp']['host'] + "']: ").lower() or config['ftp']['host']
+	while config['ftp']['username'] == '': config['ftp']['username'] = raw_input('FTP Username: ') or ''
+	while config['ftp']['password'] == '': config['ftp']['password'] = raw_input('FTP Password: ') or ''
+	config['ftp']['ftp dir'] = raw_input("FTP Directory ['" + config['ftp']['ftp dir'] + "']: ") or config['ftp']['ftp dir']
+	
+	# Location Information
+	config['local']['local dir'] = raw_input("Local Directory ['" + config['local']['local dir'] + "']: ") or config['local']['local dir']
+	config['local']['delete local'] = raw_input("Delete local copy ['" + config['local']['delete local'] + "']: ").lower() or config['local']['delete local']
+	
+	# Time Information
+	config['time']['start time'] = raw_input("Start time ['" + config['time']['start time'] + "']: ") or config['time']['start time']
+	config['time']['end time'] = raw_input("End time ['" + config['time']['end time'] + "']: ") or config['time']['end time']
+	config['time']['update every'] = raw_input("Update every (in minutes) ['" + config['time']['update every'] + "']: ") or config['time']['update every']
+	
+	# Personal Information
+	while config['information']['name'] == '': config['information']['name'] = raw_input('Full Name: ') or ''
+	while config['information']['job title'] == '': config['information']['job title'] = raw_input('Job Title: ') or ''
+	
+	# Create a ConfigParser to write to a file
+	fc = ConfigParser.ConfigParser()
+	
+	for c in config:
+		fc.add_section(c)
+		for d in config[c]:
+			fc.set(c, d, config[c][d])
+
+	# write to screen
+	fc.write(open(file, 'w'))
+
+def __init__(file):
+	config = configuration(file)
 	if not os.path.exists(config['local dir']):
 		os.makedirs(config['local dir'])
+	return config
+
+if __name__ == '__main__':
+	config = __init__('config.ini')
 	createDaemon()
