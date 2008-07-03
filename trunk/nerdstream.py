@@ -83,8 +83,7 @@ def ftp_image(filename):
 def configuration(file):
 	if not os.path.exists(file):
 		create_config(file)
-	else:
-		return open_config(file)
+	return open_config(file)
 
 def open_config(file):
 	fc = ConfigParser.ConfigParser()
