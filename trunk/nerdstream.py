@@ -7,7 +7,14 @@ Created by Ali Karbassi on 2008-07-01.
 Copyright (c) 2008 Ali Karbassi. All rights reserved.
 """
 
-import time, sys, os, shutil, subprocess, threading, ConfigParser, string
+import string
+import time
+import sys
+import os
+import shutil
+import subprocess
+import threading
+import ConfigParser
 from time import strftime
 from ftplib import FTP
 
@@ -111,16 +118,18 @@ def open_config(file):
 
 def create_config(file):
 	config = {
-				'ftp' : {'host' : 'yankee.sierrabravo.net', 'ftp dir' : 'public_html/nerdstream/', 'username' : '', 'password' : ''},
-				'local' : {'local dir' : 'shots/', 'delete local' : 'false'},
-				'time' : {'start time' : '0730', 'end time' : '1800', 'update every' : '1'},
-				'information' : {'name' : '', 'job title' : ''}
-				}
+		'ftp' : {'host' : 'yankee.sierrabravo.net', 'ftp dir' : 'public_html/nerdstream/', 'username' : '', 'password' : ''},
+		'local' : {'local dir' : 'shots/', 'delete local' : 'false'},
+		'time' : {'start time' : '0730', 'end time' : '1800', 'update every' : '1'},
+		'information' : {'name' : '', 'job title' : ''}
+	}
 	
 	# FTP Information
 	config['ftp']['host'] = raw_input("FTP Host ['" + config['ftp']['host'] + "']: ").lower() or config['ftp']['host']
-	while config['ftp']['username'] == '': config['ftp']['username'] = raw_input('FTP Username: ') or ''
-	while config['ftp']['password'] == '': config['ftp']['password'] = raw_input('FTP Password: ') or ''
+	while config['ftp']['username'] == '':
+		config['ftp']['username'] = raw_input('FTP Username: ') or ''
+	while config['ftp']['password'] == '':
+		config['ftp']['password'] = raw_input('FTP Password: ') or ''
 	config['ftp']['ftp dir'] = raw_input("FTP Directory ['" + config['ftp']['ftp dir'] + "']: ") or config['ftp']['ftp dir']
 	
 	# Location Information
@@ -133,8 +142,10 @@ def create_config(file):
 	config['time']['update every'] = raw_input("Update every (in minutes) ['" + config['time']['update every'] + "']: ") or config['time']['update every']
 	
 	# Personal Information
-	while config['information']['name'] == '': config['information']['name'] = raw_input('Full Name: ') or ''
-	while config['information']['job title'] == '': config['information']['job title'] = raw_input('Job Title: ') or ''
+	while config['information']['name'] == '':
+		config['information']['name'] = raw_input('Full Name: ') or ''
+	while config['information']['job title'] == '':
+		config['information']['job title'] = raw_input('Job Title: ') or ''
 	
 	# Create a ConfigParser to write to a file
 	fc = ConfigParser.ConfigParser()
