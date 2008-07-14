@@ -7,61 +7,68 @@ Created by Ali Karbassi on 2008-07-01.
 Copyright (c) 2008 Ali Karbassi. All rights reserved.
 """
 
-import string
-import time
 import sys
 import os
+import string
+import time
 import shutil
 import subprocess
 import threading
-import ConfigParser
+from ConfigParser import ConfigParser
 from time import strftime
-from ftplib import FTP
+
+from flickrapi import FlickrAPI
 
 def loop():
 	if int(strftime("%H%M")) > int(config['start time']) and int(strftime("%H%M")) < int(config['end time']):
+		print int(strftime("%H%M"))
+		print int(config['start time'])
+		print int(strftime("%H%M"))
+		print int(config['end time'])
 		take_picture()
 
-def create_latest(file):
-	latest_file = config['local dir'] + '/latest.jpg'
-	shutil.copy(file, latest_file)
-	ftp_image(latest_file)
+# def create_latest(file):
+# 	latest_file = config['local dir'] + '/latest.jpg'
+# 	shutil.copy(file, latest_file)
+# 	upload_to_flickr(latest_file)
 
 def take_picture():
 	datetime = strftime("%Y%m%dT%H%M")
 	filename = config['local dir'] + '/' + datetime + '.jpg'
 	subprocess.call("./isightcapture " + filename, shell=True)
 	time.sleep(1)
-	create_latest(filename)
-	ftp_image(filename)
+	# create_latest(filename)
+	upload_to_flickr(filename)
 
-def ftp_image(filename):
-	new_dir = os.path.dirname(filename)
-	(head, name_of_file) = os.path.split(filename)
-	old_dir = os.getcwd()
-	os.chdir(new_dir)
+def upload_to_flickr(filename):
+	api_key = 'ad176a252ba707a54af27cbdd35c5760'
+	user_id = '48251447@N00'
+	secret_key='2e9f114458f5889e'
 	
-	# FTP Upload
-	ftp = FTP(config['host'])
-	ftp.login(config['username'], config['password'])
+	flickr = FlickrAPI(api_key,secret_key, format='etree')
 	
-	for directory in config['ftp dir'].split('/'):
-		try:
-			ftp.cwd(directory)
-		except Exception, e:
-			ftp.mkd(directory)
-			ftp.cwd(directory)
+	(token, frob) = flickr.get_token_part_one(perms='write')
 	
-	fi = open(name_of_file, "rb")
-	ftp.storbinary("STOR " + name_of_file, fi, 1)
-	ftp.quit()
+	if not token:
+		raw_input("Press ENTER after you authorized this program")
+		
+	flickr.get_token_part_two((token, frob))
 	
-	# Remove file
-	if config['delete local'].lower() == 'true':
-		os.remove(name_of_file)
-	
-	# Move back to old dir so the script will continue to run
-	os.chdir(old_dir)
+	#the upload function, change the filename, and tag, or if want it to be private, change is_public=1 to is_public=0
+	rsp = flickr.upload(filename=filename,
+		# callback=func,
+		title=config['name'] + ' @ ' + strftime("%Y%m%dT%H%M"),
+		# description = 'Testing Upload feature.',
+		tags='NerdStream ns:user="' + config['name'] + '" ns:title="' + config['job title'] + '"',
+		is_public='0',
+		is_friend='0',
+		is_family='0',
+		safety_level='1',
+		content_type='1',
+		hidden='1'
+		)
+	# photo_id = rsp.photoid[0].text
+
 
 def configuration(file):
 	if not os.path.exists(file):
@@ -69,11 +76,10 @@ def configuration(file):
 	return open_config(file)
 
 def open_config(file):
-	fc = ConfigParser.ConfigParser()
+	fc = ConfigParser()
 	fc.read(file)
 	
-	c = fc.items("ftp")
-	c += fc.items("local")
+	c = fc.items("local")
 	c += fc.items("time")
 	c += fc.items("information")
 	
@@ -84,8 +90,6 @@ def open_config(file):
 	# Checking for trailing slash
 	if nc['local dir'].endswith("/"):
 		nc['local dir'] = nc['local dir'].rstrip("/")
-	if nc['ftp dir'].endswith("/"):
-		nc['ftp dir'] = nc['ftp dir'].rstrip("/")
 	
 	# Change timer var from minutes to seconds
 	nc['update every'] = int(nc['update every'])
@@ -94,19 +98,10 @@ def open_config(file):
 
 def create_config(file):
 	config = {
-		'ftp' : {'host' : 'yankee.sierrabravo.net', 'ftp dir' : 'public_html/nerdstream/', 'username' : '', 'password' : ''},
 		'local' : {'local dir' : 'shots/', 'delete local' : 'false'},
 		'time' : {'start time' : '0730', 'end time' : '1800', 'update every' : '1'},
 		'information' : {'name' : '', 'job title' : ''}
 	}
-	
-	# FTP Information
-	config['ftp']['host'] = raw_input("FTP Host ['" + config['ftp']['host'] + "']: ").lower() or config['ftp']['host']
-	while config['ftp']['username'] == '':
-		config['ftp']['username'] = raw_input('FTP Username: ') or ''
-	while config['ftp']['password'] == '':
-		config['ftp']['password'] = raw_input('FTP Password: ') or ''
-	config['ftp']['ftp dir'] = raw_input("FTP Directory ['" + config['ftp']['ftp dir'] + "']: ") or config['ftp']['ftp dir']
 	
 	# Location Information
 	config['local']['local dir'] = raw_input("Local Directory ['" + config['local']['local dir'] + "']: ") or config['local']['local dir']
@@ -135,7 +130,7 @@ def create_config(file):
 	fc.write(open(file, 'w'))
 
 def __init__(file):
-	if os.getcwd() != sys.argv[0]:
+	if os.getcwd() != sys.argv[0] and os.path.dirname(sys.argv[0]) is not '':
 		os.chdir(os.path.dirname(sys.argv[0]))
 	config = configuration(file)
 	if not os.path.exists(config['local dir']):
@@ -143,5 +138,9 @@ def __init__(file):
 	return config
 
 if __name__ == '__main__':
+	# print sys.argv
+	# print os.getcwd()
+	# print os.path.dirname(sys.argv[0])
 	config = __init__('config.ini')
+	# print config
 	loop()
