@@ -12,7 +12,7 @@ import os
 from flickrapi import FlickrAPI
 
 api_key = 'ad176a252ba707a54af27cbdd35c5760'
-user_id = '48251447@N00'
+user_id = '28598515@N02'
 secret_key='2e9f114458f5889e'
 
 flickr = FlickrAPI(api_key,secret_key, format='etree')
@@ -23,7 +23,7 @@ if not token:
 	raw_input("Press ENTER after you authorized this program")
 flickr.get_token_part_two((token, frob))
 
-#the call back function
+# # the call back function
 # def func(progress, done):
 # 	if done:
 # 		print "done"
@@ -46,14 +46,22 @@ flickr.get_token_part_two((token, frob))
 # photo_id = rsp.photoid[0].text
 # print flickr.photosets_create(api_key=api_key, title="Hello", primary_photo_id=photo_id).text
 
+# # GET PHOTOSETS
+# ret = flickr.photosets_getList(api_key=api_key)
+# 
+# for i in ret.find('photosets').findall('photoset'):
+# 	title = i.find('title').text
+# 	id = i.attrib['id']
+# 	if 'Event' in title and not 'Private' in title:
+# 		print id + " : " + title
 
-ret = flickr.photosets_getList(api_key=api_key)
+ret = flickr.tags_getListUserRaw(api_key=api_key)
 
-for i in ret.find('photosets').findall('photoset'):
-	title = i.find('title').text
-	id = i.attrib['id']
-	if 'Event' in title and not 'Private' in title:
-		print id + " : " + title
-
+for i in ret.find('who').find('tags').findall('tag'):
+	print i.attrib['clean']
+	r2 = flickr.photos_search(api_key=api_key, user_id=user_id, tags=i.attrib['clean'] + ',ns:')
+	for j in r2.find('photos').findall('photo'):
+		print j.attrib
+	
 
 
