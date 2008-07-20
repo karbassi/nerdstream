@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{user.first_name}} {{user.last_name}} - results
+{% endblock %}
+
+{% block contents %}
+<div class="user">
+{{user.last_name}}
+</div>
+{% endblock %}

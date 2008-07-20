@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block contents %}
+<form action="." method="post">
+	{{registerform.as_p}}
+	<input type="submit" name="register" value="register" />
+</form>
+
+<script type="text/javascript" charset="utf-8">
+	$("#id_start_time").clockpick({
+		starthour : 8,
+		endhour : 10,
+		showminutes : true,
+		layout : 'horizontal',
+		event : 'focus',
+		military : true,
+		}
+	);
+	$("#id_end_time").clockpick({
+		starthour : 16,
+		endhour : 18,
+		showminutes : true,
+		layout : 'horizontal',
+		event : 'focus',
+		military : true,
+		}
+	);
+</script>
+{% endblock %}

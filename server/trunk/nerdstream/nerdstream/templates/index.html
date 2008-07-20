@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}
+NerdStream
+{% endblock %}
+
+{% block contents %}
+<h2>NerdStream userlist</h2>
+
+{% for u in users %}
+<div class="user">
+<a href="{{u.get_absolute_url}}">{{u.first_name}} {{u.last_name}}</a>
+</div>
+{% endfor %}
+
+{% endblock %}

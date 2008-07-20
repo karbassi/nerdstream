@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{user.first_name}} {{user.last_name}} - details
+{% endblock %}
+
+{% block contents %}
+<div class="user">
+	{
+		"first name":"{{user.first_name}}",
+		"last_name":"{{user.last_name}}",
+		"computer_name":"{{user.computer_name}}",
+		"job_title":"{{user.job_title}}",
+		"start_time":"{{user.start_time}}",
+		"end_time":"{{user.end_time}}",
+		"interval":"{{user.interval}}",
+		"last_update":"{{user.last_update}}",
+	}
+</div>
+{% endblock %}
