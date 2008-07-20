@@ -15,13 +15,14 @@ import shutil
 import subprocess
 import threading
 import urllib2
+import webbrowser
 from time import strftime
 from ConfigParser import ConfigParser
 
 from flickrapi import FlickrAPI
 
 def loop():
-	if config['last_update'] != datetime: 
+	if config['last_update'] != datetime:
 		if int(strftime("%H%M")) > int(config['start_time']) and int(strftime("%H%M")) < int(config['end_time']):
 			if int(strftime('%M')) % int(config['interval']) is 0:
 				take_picture()
@@ -32,7 +33,7 @@ def take_picture():
 	time.sleep(1)
 	upload_to_flickr(filename, date)
 	update_time()
-	
+
 def update_time():
 	print urllib2.urlopen('http://yankee.sierrabravo.net/~akarbass/ns/ns.php?u=' + os.getenv('USER') + '&t=' + datetime).read()
 
@@ -47,7 +48,7 @@ def upload_to_flickr(filename, tags):
 	
 	if not token:
 		raw_input("Press ENTER after you authorized this program")
-		
+	
 	flickr.get_token_part_two((token, frob))
 	
 	t = ''
@@ -76,7 +77,14 @@ def upload_to_flickr(filename, tags):
 
 def configuration():
 	global config
-	config = eval(urllib2.urlopen('http://yankee.sierrabravo.net/~akarbass/ns/ns.php?u=' + os.getenv('USER')).read())
+	config = eval(urllib2.urlopen(base_url + '/user/' + os.getenv('USER') + '/config/').read())
+	if config['last_name'] == '':
+		raw_input("You are not part of the nerdstream system. Press enter to go sign up. When you're done, come back here.")
+		webbrowser.open(base_url + '/create/' + os.getenv('USER'))
+		raw_input("Press ENTER after you signed up.")
+		configuration()
+	
+	sys.exit()
 
 def __init__():
 	if os.getcwd() != sys.argv[0] and os.path.dirname(sys.argv[0]) is not '':
@@ -86,20 +94,21 @@ def __init__():
 	
 	if not os.path.exists(config['local_dir']):
 		os.makedirs(config['local_dir'])
-
+	
 	global date, datetime
 	
 	date = {
-		'year':strftime('%Y'), 
+		'year':strftime('%Y'),
 		'month':strftime('%m'),
 		'day':strftime('%d'),
 		'hour':strftime('%H'),
 		'minute':strftime('%M'),
 		'second':strftime('%S'),
 		'weekday':strftime('%A')}
-		
+	
 	datetime = date['year'] + date['month'] + date['day'] + 'T' + date['hour'] + date['minute']
 
 if __name__ == '__main__':
+	base_url = 'http://localhost:8080'
 	__init__()
 	loop()
