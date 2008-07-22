@@ -2,6 +2,9 @@ from django.http import HttpResponse, HttpResponseRedirect
 from nerdstream.register import models
 import nsforms
 from django.shortcuts import render_to_response
+from django import newforms as forms
+
+import logging
 
 def render(template, payload):
 	# payload['recents'] = models.Users.all().fetch(5)
@@ -25,16 +28,11 @@ def create(request):
 
 def create_computer(request, computer_name):
 	if request.method == 'GET':
-		# data = {'computer_name': computer_name,
-		# 	'first_name': '',
-		# 	'last_name': '',
-		# 	'job_title': '',
-		# 	'start_time': '',
-		# 	'end_time': ''}
-		# registerform = nsforms.RegisterForm(data)
 		registerform = nsforms.RegisterForm()
 	if request.method == 'POST':
 		registerform = nsforms.RegisterForm(request.POST)
+		# registerform.__dict__['fields']['computer_name'] = forms.CharField(default=computer_name)
+		logging.exception(registerform.__dict__['fields'])
 		if registerform.is_valid():
 			user = registerform.save()
 			return HttpResponseRedirect(user.get_absolute_url())

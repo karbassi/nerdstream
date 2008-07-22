@@ -35,7 +35,7 @@ def take_picture():
 	update_time()
 
 def update_time():
-	print urllib2.urlopen('http://yankee.sierrabravo.net/~akarbass/ns/ns.php?u=' + os.getenv('USER') + '&t=' + datetime).read()
+	print urllib2.urlopen(base_url + '/user/' + os.getenv('USER') + '/update/').read()
 
 def upload_to_flickr(filename, tags):
 	api_key = 'ad176a252ba707a54af27cbdd35c5760'

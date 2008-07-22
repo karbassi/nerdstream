@@ -5,12 +5,12 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-	# ('Your Name', 'your_email@domain.com'),
+	('Ali Karbassi', 'ali@karbassi.com'),
 )
 
 MANAGERS = ADMINS
 
-DATABASE_ENGINE = ''		   # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'ado_mssql'.
+DATABASE_ENGINE = ''		   	# 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'ado_mssql'.
 DATABASE_NAME = ''			   # Or path to database file if using sqlite3.
 DATABASE_USER = ''			   # Not used with sqlite3.
 DATABASE_PASSWORD = ''		   # Not used with sqlite3.
@@ -63,7 +63,6 @@ MIDDLEWARE_CLASSES = (
 )
 
 ROOT_URLCONF = 'nerdstream.urls'
-
 
 ROOT_PATH = os.path.dirname(__file__)
 TEMPLATE_DIRS = (
