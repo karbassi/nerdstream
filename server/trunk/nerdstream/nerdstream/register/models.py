@@ -10,9 +10,9 @@ class Users(db.Model):
 	interval = db.IntegerProperty(default=5, required=True)
 	last_update = db.DateTimeProperty(auto_now=1)
 	creation_date = db.DateTimeProperty(auto_now_add=1)
-
+	
 	def __str__(self):
-		return '%s' %self.question
+		return '%s' %self.computer_name
 	
 	def get_absolute_url(self):
-		return '/user/%s/' % self.key()
+		return '/user/%s/config' % self.computer_name
