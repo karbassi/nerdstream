@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}
+NerdStream {{user.full_name}}'s Page
+{% endblock %}
+
+{% block contents %}
+
+<h2>{{user.full_name|title}}</h2>
+
+<h3>Last Update:</h3>
+<p>{{user.last_update|timesince}} ago</p>
+
+<h3>Job Title:</h3>
+<p>{{user.job_title|title}}</p>
+
+<p id="back"><a href="/">Back</a></p>
+{% endblock %}

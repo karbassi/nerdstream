@@ -1,29 +1,25 @@
 {% extends 'base.html' %}
 
-{% block contents %}
-<form action="." method="post">
-	{{registerform.as_p}}
-	<input type="submit" name="register" value="register" />
-</form>
+{% block title %}
+NerdStream Registration Page
+{% endblock %}
 
-<script type="text/javascript" charset="utf-8">
-	$("#id_start_time").clockpick({
-		starthour : 8,
-		endhour : 10,
-		showminutes : true,
-		layout : 'horizontal',
-		event : 'focus',
-		military : true,
-		}
-	);
-	$("#id_end_time").clockpick({
-		starthour : 16,
-		endhour : 18,
-		showminutes : true,
-		layout : 'horizontal',
-		event : 'focus',
-		military : true,
-		}
-	);
-</script>
+{% block head %}
+<link href="/media/css/form.css" rel="stylesheet" type="text/css" media="all" />
+{% endblock %}
+
+
+{% block contents %}
+<!-- #create_form_div -->
+<div id="create_form_div">
+	<form action="." method="post" id="create_form">
+		<fieldset id="create_form_fieldset">
+			{{registerform.as_p}}
+			<div class="buttons">
+				<button type="submit" class="positive">Register</button>
+			</div>
+		</fieldset>
+	</form>
+</div>
+
 {% endblock %}

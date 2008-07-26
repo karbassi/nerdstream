@@ -2,14 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-		<title>{% block title %}Page title{% endblock %}</title>
-		<script src="/media/js/jquery.js"></script>
-		<script src="/media/js/jquery.clockpick.js"></script>
-		<link href="/media/css/clickpick.css" rel="stylesheet" type="text/css" media="all" />
+		<title>{% block title %}NerdStream{% endblock %}</title>
+		<link href="http://yui.yahooapis.com/2.5.2/build/reset/reset-min.css" rel="stylesheet" type="text/css" />
+		<link href="/media/css/global.css" rel="stylesheet" type="text/css" media="all" />
+		{% block head %}{% endblock %}
 	</head>
 	<body>
+		
 		<div class="contents">
-		{% block contents %}{% endblock %}
+			<h1 id='logo'><a href="/"><span>nerdstream</span></a></h1>
+			{% block contents %}{% endblock %}
 		</div>
 	</body>
 </html>
