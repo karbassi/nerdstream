@@ -28,14 +28,20 @@ def loop():
 				take_picture()
 
 def take_picture():
-	filename = config['local_dir'] + '/' + datetime + '.png'
+	# filename = config['local_dir'] + '/' + datetime + '.png'
+	filename = './' + datetime + '.png'
 	subprocess.call("./isightcapture -t png " + filename, shell=True)
 	time.sleep(1)
 	upload_to_flickr(filename, date)
 	update_time()
+	del_file(filename)
 
 def update_time():
-	print urllib2.urlopen(base_url + '/user/' + os.getenv('USER') + '/update/').read()
+	# print urllib2.urlopen(base_url + '/user/' + os.getenv('USER') + '/update/').read()
+	pass
+	
+def del_file(filename):
+	os.remove(filename)
 
 def upload_to_flickr(filename, tags):
 	api_key = 'ad176a252ba707a54af27cbdd35c5760'
@@ -51,18 +57,20 @@ def upload_to_flickr(filename, tags):
 	
 	flickr.get_token_part_two((token, frob))
 	
+	# Start off the tag list
 	t = ''
+	
 	#Create tag list
 	for x in tags:
 		t += '"ns:' + x + '=' + tags[x] + '" '
 	
-	t += '"ns:user=' + config['first_name'] + ' ' + config['last_name'] + '" '
+	t += '"ns:user=' + config['full name'] + '" '
 	t += '"ns:title=' + config['job_title'] + '" '
 	
 	#the upload function, change the filename, and tag, or if want it to be private, change is_public=1 to is_public=0
 	rsp = flickr.upload(filename=filename,
 		# callback=func,
-		title=config['first_name'] + ' ' + config['last_name'] + ' @ ' + tags['hour'] + ':' + tags['minute'],
+		title=config['full name'] + ' @ ' + tags['hour'] + ':' + tags['minute'],
 		# description = 'Testing Upload feature.',
 		tags='NerdStream ' + t,
 		is_public='0',
@@ -78,13 +86,11 @@ def upload_to_flickr(filename, tags):
 def configuration():
 	global config
 	config = eval(urllib2.urlopen(base_url + '/user/' + os.getenv('USER') + '/config/').read())
-	if config['last_name'] == '':
+	if config['full name'] == '':
 		raw_input("You are not part of the nerdstream system. Press enter to go sign up. When you're done, come back here.")
 		webbrowser.open(base_url + '/create/' + os.getenv('USER'))
 		raw_input("Press ENTER after you signed up.")
 		configuration()
-	
-	sys.exit()
 
 def __init__():
 	if os.getcwd() != sys.argv[0] and os.path.dirname(sys.argv[0]) is not '':
@@ -92,8 +98,8 @@ def __init__():
 	
 	configuration()
 	
-	if not os.path.exists(config['local_dir']):
-		os.makedirs(config['local_dir'])
+	# if not os.path.exists(config['local_dir']):
+		# os.makedirs(config['local_dir'])
 	
 	global date, datetime
 	
@@ -109,6 +115,6 @@ def __init__():
 	datetime = date['year'] + date['month'] + date['day'] + 'T' + date['hour'] + date['minute']
 
 if __name__ == '__main__':
-	base_url = 'http://localhost:8080'
+	base_url = 'http://nerdstream.appspot.com'
 	__init__()
 	loop()

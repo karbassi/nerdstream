@@ -33,3 +33,9 @@ def user_config(request, computer_name):
 	user = models.Users.gql('WHERE computer_name = :1', computer_name).get()
 	payload = dict(user=user)
 	return render_to_response('config.html', payload)
+
+def user_update(request, computer_name):
+	pass
+	# user = models.Users.gql('WHERE computer_name = :1', computer_name).get()
+	# payload = dict(user=user)
+	# return render_to_response('config.html', payload)

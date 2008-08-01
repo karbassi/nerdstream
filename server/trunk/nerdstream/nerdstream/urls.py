@@ -7,5 +7,6 @@ urlpatterns = patterns('',
 	(r'^user/(?P<computer_name>[^\.^/]+)/$', 'nerdstream.register.views.user'),
 	# (r'^user/(?P<user_key>[^\.^/]+)/results/$', 'nerdstream.register.views.user_results'),
 	(r'^user/(?P<computer_name>[^\.^/]+)/config/$', 'nerdstream.register.views.user_config'),
+	(r'^user/(?P<computer_name>[^\.^/]+)/update/$', 'nerdstream.register.views.user_update'),
 	(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': 'nerdstream/media'}),
 )
