@@ -17,8 +17,7 @@ import webbrowser
 from flickrapi import FlickrAPI
 
 def check_server():
-	# base_url = 'http://nerdstream.appspot.com'
-	base_url = 'http://localhost:8080' # Testing only!
+	base_url = 'http://nerdstream.appspot.com'
 	computer_name =  os.getenv('USER')
 	config = eval(urllib2.urlopen(base_url + '/config/' + computer_name + '/').read())
 	
