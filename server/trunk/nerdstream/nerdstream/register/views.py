@@ -29,13 +29,13 @@ def create_computer(request, computer_name):
 	payload = dict(registerform=registerform)
 	return render_to_response('create.html', payload)
 
-def user_config(request, computer_name):
+def config_user(request, computer_name):
 	user = models.Users.gql('WHERE computer_name = :1', computer_name).get()
 	payload = dict(user=user)
 	return render_to_response('config.html', payload)
 
-def user_update(request, computer_name):
-	pass
-	# user = models.Users.gql('WHERE computer_name = :1', computer_name).get()
-	# payload = dict(user=user)
-	# return render_to_response('config.html', payload)
+def config_user_update(request, computer_name):
+	user = models.Users.gql('WHERE computer_name = :1', computer_name).get()
+	user.save()
+	payload = dict(user=user)
+	return render_to_response('user.html', payload)

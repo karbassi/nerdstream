@@ -1,18 +1,29 @@
 {% extends 'base.html' %}
 
 {% block title %}
+{% if user.full_name %}
 NerdStream {{user.full_name}}'s Page
+{% else %}
+NerdStream - Invalid User Page
+{% endif %}
 {% endblock %}
 
 {% block contents %}
+{% if user.full_name %}
+	<h2>{{user.full_name|title}}</h2>
+	
+	<h3>Joined</h3>
+	<p>{{user.creation_date|date}}</p>
 
-<h2>{{user.full_name|title}}</h2>
+	<h3>Last Update:</h3>
+	<p>{{user.last_update|timesince}} ago</p>
 
-<h3>Last Update:</h3>
-<p>{{user.last_update|timesince}} ago</p>
-
-<h3>Job Title:</h3>
-<p>{{user.job_title|title}}</p>
+	<h3>Job Title:</h3>
+	<p>{{user.job_title|title}}</p>
+{% else %}
+	<h2>Sorry!</h2>
+	<p>Not a valid user. Go back and choose from the list.</p>
+{% endif %}
 
 <p id="back"><a href="/">Back</a></p>
 {% endblock %}
