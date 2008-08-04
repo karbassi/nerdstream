@@ -4,6 +4,7 @@
 nerdstream.py
 
 Created by Ali Karbassi on 2008-07-01.
+Updated: 2008-08-04
 Copyright (c) 2008 Ali Karbassi. All rights reserved.
 """
 
@@ -51,7 +52,7 @@ def take_picture():
 def update_time():
 	"""Call the server page to update the late update time"""
 	urllib2.urlopen(base_url + '/config/' + computer_name + '/update/').read()
-	
+
 def upload_to_flickr(tags):
 	
 	# Start off the tag list
@@ -89,10 +90,10 @@ def get_config():
 		webbrowser.open(base_url + '/create/' + computer_name)
 		raw_input("Press ENTER after you signed up.")
 		get_config()
-		
+
 def check_flickr():
 	"""Make sure the computer is registered with flickr"""
-
+	
 	global flickr, token, frob
 	flickr = FlickrAPI(api_key, secret_key, format='etree')
 	(token, frob) = flickr.get_token_part_one(perms='write')
@@ -131,17 +132,24 @@ def __init__():
 		'weekday':strftime('%A')
 	}
 	
+	# Time difference between localhost and google appengine
+	# server_diff = 5
+	
 	# Datetime formed. YYYY-MM-DD HH:MM
-	datetime = date['year'] + '-' + date['month'] + '-' + date['day'] + ' ' + date['hour'] + ':' + date['minute']
+	# datetime = date['year'] + '-' + date['month'] + '-' + date['day'] + ' ' + str(int(date['hour']) + server_diff) + ':' + date['minute']
+	
+	# Chop off the seconds from the update field.
+	# last_update = config['last_update'][0:16]
+	
+	# Changed to minute because the program needs to check if the image was updated in the span of the same minute
+	last_update = config['last_update'][14:16]
+	datetime = date['minute']
 	
 	# Get the current weekday (0 - sunday, 1 - monday, ..., 6 - saturday)
 	weekday = int(strftime('%w'))
 	
 	# Get the current time in HHMM form
 	current_time = int(strftime("%H%M"))
-	
-	# Chop off the seconds from the update field.
-	last_update = config['last_update'][0:16]
 	
 	# File name is real fun here. It will produce the following: "FullName-YYYYMMDDTHHMM.png"
 	filename = './' + ''.join(c for c in config['full name'] if not c.isspace()) + "-" + date['year'] + date['month'] + date['day'] + 'T' + date['hour'] + date['minute'] + '.png'
