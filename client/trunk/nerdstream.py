@@ -25,7 +25,7 @@ def loop():
 	# Make sure a picture is taken only once per minute and
 	# Make sure the time is an interval of the server's interval. Every x minutes.
 	if weekday is not 0 and weekday is not 6 and \
-		cur_time > int(config['start_time']) and cur_time < int(config['end_time']) and \
+		current_time > int(config['start_time']) and current_time < int(config['end_time']) and \
 		last_update != datetime and \
 		int(strftime('%M')) % int(config['interval']) is 0:
 			
@@ -138,7 +138,7 @@ def __init__():
 	weekday = int(strftime('%w'))
 	
 	# Get the current time in HHMM form
-	cur_time = int(strftime("%H%M"))
+	current_time = int(strftime("%H%M"))
 	
 	# Chop off the seconds from the update field.
 	last_update = config['last_update'][0:16]
