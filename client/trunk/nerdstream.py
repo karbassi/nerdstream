@@ -133,7 +133,7 @@ def __init__():
 	}
 	
 	# Time difference between localhost and google appengine
-	server_diff = 5
+	# server_diff = 5
 	
 	# Datetime formed. YYYY-MM-DD HH:MM
 	# datetime = date['year'] + '-' + date['month'] + '-' + date['day'] + ' ' + str(int(date['hour']) + server_diff) + ':' + date['minute']
