@@ -53,13 +53,16 @@ def check_files():
 	return fail
 
 def create_process():
+	
+	process_dir = '/Users/' + os.getenv('USER') + '/Library/LaunchAgents'
+	
+	if not os.path.exists(process_dir):
+		os.makedirs(process_dir)
+	
 	file_from = 'com.sierrabravo.nerdstream.agent.plist'
-	file_to = '/Users/' + os.getenv('USER') + '/Library/LaunchAgents/com.sierrabravo.nerdstream.agent.plist'
+	file_to = process_dir + '/' + file_from
 	
-	shutil.copyfile(file_from, file_to)
-	
-	if not os.path.exists(file_to):
-		print 'fail!'
+	shutil.move(file_from, file_to)
 	
 	subprocess.call('launchctl load ' + file_to, shell=True)
 
