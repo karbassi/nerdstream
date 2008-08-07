@@ -43,7 +43,7 @@ def loop():
 			update_time()
 			
 			# Delete the local file
-			os.remove(filename)
+			# os.remove(filename)
 
 def take_picture():
 	"""Call program to take the picture"""
@@ -132,15 +132,6 @@ def __init__():
 		'weekday':strftime('%A')
 	}
 	
-	# Time difference between localhost and google appengine
-	# server_diff = 5
-	
-	# Datetime formed. YYYY-MM-DD HH:MM
-	# datetime = date['year'] + '-' + date['month'] + '-' + date['day'] + ' ' + str(int(date['hour']) + server_diff) + ':' + date['minute']
-	
-	# Chop off the seconds from the update field.
-	# last_update = config['last_update'][0:16]
-	
 	# Changed to minute because the program needs to check if the image was updated in the span of the same minute
 	last_update = config['last_update'][14:16]
 	datetime = date['minute']
@@ -152,7 +143,7 @@ def __init__():
 	current_time = int(strftime("%H%M"))
 	
 	# File name is real fun here. It will produce the following: "FullName-YYYYMMDDTHHMM.png"
-	filename = './' + ''.join(c for c in config['full name'] if not c.isspace()) + "-" + date['year'] + date['month'] + date['day'] + 'T' + date['hour'] + date['minute'] + '.png'
+	filename = 'latest.png'
 
 if __name__ == '__main__':
 	api_key = 'ad176a252ba707a54af27cbdd35c5760'
