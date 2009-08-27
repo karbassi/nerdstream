@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}
+NerdStream Registration Page
+{% endblock %}
+
+{% block head %}
+<link href="/media/css/form.css" rel="stylesheet" type="text/css" media="all" />
+{% endblock %}
+
+
+{% block contents %}
+<!-- #create_form_div -->
+<div id="create_form_div">
+	<form action="." method="post" id="create_form">
+		<fieldset id="create_form_fieldset">
+			{{registerform.as_p}}
+			<div class="buttons">
+				<button type="submit" class="positive">Register</button>
+			</div>
+		</fieldset>
+	</form>
+</div>
+
+{% endblock %}
