@@ -1,0 +1,25 @@
+To install:
+
+Move your the file to /Applications/nerdstream. The structure should look like:
+
+/Applications/nerdstream/
+/Applications/nerdstream/com.sierrabravo.nerdstream.agent.plist
+/Applications/nerdstream/install.py
+/Applications/nerdstream/isightcapture
+/Applications/nerdstream/nerdstream.py
+/Applications/nerdstream/uninstall.py
+/Applications/nerdstream/flickrapi/
+/Applications/nerdstream/flickrapi/__init__.py
+/Applications/nerdstream/flickrapi/cache.py
+/Applications/nerdstream/flickrapi/exceptions.py
+/Applications/nerdstream/flickrapi/multipart.py
+/Applications/nerdstream/flickrapi/reportinghttp.py
+/Applications/nerdstream/flickrapi/tokencache.py
+/Applications/nerdstream/flickrapi/xmlnode.py
+
+
+Once the files are in /Applications/nerdstream, then load terminal and go to /Applications/nerdstream. Then run the install script like so:
+
+python install.py
+
+The install script should instruct you through the rest.
