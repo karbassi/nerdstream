@@ -1,7 +1,0 @@
-//
-// Prefix header for all source files of the 'NerdStream' target in the 'NerdStream' project
-//
-
-#ifdef __OBJC__
-    #import <Cocoa/Cocoa.h>
-#endif
