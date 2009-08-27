@@ -1,8 +1,0 @@
-h1. Todo List
-
-* Add TimeTable to interface
-* Add way to change data/time and interval from the interface
-* Add 'movie' functionality
-* Add way to view large version of images
-* Make app stretch full-screen in browser
-* Load Nerd information dynamically from XML file
