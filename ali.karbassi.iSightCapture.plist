@@ -7,14 +7,18 @@
 	<key>KeepAlive</key>
 	<false/>
 	<key>Label</key>
-	<string>com.sierrabravo.nerdstream.agent</string>
+	<string>ali.karbassi.nerdstream</string>
 	<key>ProgramArguments</key>
 	<array>
-		<string>/Applications/nerdstream/nerdstream.py</string>
+		<string>/Users/ali/p/nerdstream/nerdstream.sh</string>
 	</array>
+	<key>QueueDirectories</key>
+	<array/>
 	<key>RunAtLoad</key>
 	<true/>
 	<key>StartInterval</key>
-	<integer>45</integer>
+	<integer>1800</integer>
+	<key>WatchPaths</key>
+	<array/>
 </dict>
 </plist>
