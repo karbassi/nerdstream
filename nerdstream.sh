@@ -19,3 +19,6 @@ file=$dir"`date +%Y-%m-%d_%H-%M-%S`.jpg"
 
 # Upload file
 curl -F "img=@$file;type=image/jpeg" -F "name=$name" http://ali.karbassi.com/isight/test.php
+
+# Remove the file after upload
+rm $file
