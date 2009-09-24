@@ -3,8 +3,10 @@
 # Get username
 name=`whoami`
 
+cwd=$(pwd | sed -e "s/ /\\\ /g")
+
 # Set capture folder
-dir=`pwd`'/capture/'
+dir=$cwd'/.capture/'
 
 # Create capture folder if it doesn't exist
 if [[ ! -d "$dir" ]]; then
@@ -15,10 +17,26 @@ fi
 file=$dir"`date +%Y-%m-%d_%H-%M-%S`.jpg"
 
 # Take the picture
-`pwd`'/isightcapture' $file
+capture=$cwd'/isightcapture'
+$capture $file
 
-# Upload file
-curl -F "img=@$file;type=image/jpeg" -F "name=$name" http://ali.karbassi.com/isight/test.php
+# Server Settings
+server="ali.karbassi.com"
+serverfile="http://"$server"/isight/test.php"
 
-# Remove the file after upload
-rm $file
+# Check to see if server is up
+x=`ping -c1 $server 2>&1 | grep -i unknown`
+
+# If it is, upload all the images in the capture folder, and delete them.
+# If not, leave the files in there for when the server comes back online.
+if [ "$x" = "" ]; then
+    imgs=$dir"*"
+    for f in `ls $imgs`
+    do
+        # Upload file
+        curl -F "img=@$f;type=image/jpeg" -F "name=$name" $serverfile
+        
+        # Remove the file after upload
+        rm $f
+    done
+fi
