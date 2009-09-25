@@ -1,9 +1,13 @@
 #!/bin/bash
 
+
 # Get username
 name=`whoami`
 
-cwd=$(pwd | sed -e "s/ /\\\ /g")
+# Where the script is located
+cur_pwd=
+
+cwd=$(echo $cur_pwd | sed -e "s/ /\\\ /g")
 
 # Set capture folder
 dir=$cwd'/.capture/'
@@ -11,6 +15,7 @@ dir=$cwd'/.capture/'
 # Create capture folder if it doesn't exist
 if [[ ! -d "$dir" ]]; then
     mkdir -p $dir
+    chmod -R 755 $dir
 fi
 
 # Set file name
@@ -33,8 +38,11 @@ if [ "$x" = "" ]; then
     imgs=$dir"*"
     for f in `ls $imgs`
     do
+        # Escape spaces
+        f=$(echo $f | sed -e "s/ /\\\ /g")
+        
         # Upload file
-        curl -F "img=@$f;type=image/jpeg" -F "name=$name" $serverfile
+        curl -s -F "img=@$f;type=image/jpeg" -F "name=$name" $serverfile
         
         # Remove the file after upload
         rm $f
