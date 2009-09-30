@@ -31,10 +31,11 @@ sed s/\#username=/username=\"$name\"/ <$dir'/_capture.sh' > $dir'/capture.sh'
 rm $dir'/_capture.sh'
 
 # Set permissions
-chmod +x capture.sh
-chmod +x isightcapture
+chmod 777 capture.sh
+chmod 777 isightcapture
 chown root isightcapture
-chmod +x uninstall.sh
+chmod 777 uninstall.sh
+
 
 # plist File
 file=~/Library/LaunchAgents/ali.karbassi.nerdstream.plist
