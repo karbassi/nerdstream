@@ -1,11 +1,14 @@
 #!/bin/bash
 
-
 # Get username
-name=`whoami`
+#username=
 
 # Where the script is located
-cur_pwd=
+#cur_pwd=
+
+if [[ -z $username ]] || [[ -z $cur_pwd ]]; then
+    exit
+fi
 
 cwd=$(echo $cur_pwd | sed -e "s/ /\\\ /g")
 
@@ -42,7 +45,7 @@ if [ "$x" = "" ]; then
         f=$(echo $f | sed -e "s/ /\\\ /g")
         
         # Upload file
-        curl -s -F "img=@$f;type=image/jpeg" -F "name=$name" $serverfile
+        curl -s -F "img=@$f;type=image/jpeg" -F "name=$username" $serverfile
         
         # Remove the file after upload
         rm $f
