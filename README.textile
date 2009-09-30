@@ -1,0 +1,14 @@
+h1. Nerdstream
+
+Nerdstream is a side project created by "Ali Karbassi":http://karbassi.com to capture and broadcast webcam (specifically "iSight":http://en.wikipedia.org/wiki/ISight) captures throughout the day.
+
+h2. To Install
+
+# Open up terminal.app
+# Change directory to where the script is located
+# Type: @sudo ./install.sh <username>@
+** Example: @sudo ./install.sh karbassi@
+
+h2. Note
+
+* Currently, the web server which accepts the captures has a check to make sure the developers is the only one getting through. Once we have a better server structure, we will release this to the world.
