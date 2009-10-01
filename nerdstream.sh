@@ -43,10 +43,18 @@ if [ "$x" = "" ]; then
     do
         # Escape spaces
         f=$(echo $f | sed -e "s/ /\\\ /g")
+
+        tags=$(echo 'tags: Nerdstream ns:year='`date +%Y`' ns:month='`date +%m`' ns:weekday='`date +%u`' ns:day='`date +%m`' ns:hour='`date +%H`' ns:minute='`date +%M`' ns:second='`date +%S`' ns:user='$username | sed -e "s/:/%3A/g" | sed -e "s/ /%20/g" | sed -e "s/=/%3D/g" )
+        
+        title=$(echo $username' @ '`date +"%H:%M"` | sed -e "s/:/%3A/g" | sed -e "s/ /%20/g" | sed -e "s/=/%3D/g" )
         
         # Upload file
-        curl -s -F "img=@$f;type=image/jpeg" -F "name=$username" $serverfile
-        
+        curl -s -F "img=@$f;type=image/jpeg" \
+           -F "name=$username" \
+           -F "title="$title \
+           -F "description="$tags \
+           $serverfile
+
         # Remove the file after upload
         rm $f
     done
