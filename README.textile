@@ -4,10 +4,16 @@ Nerdstream is a side project created by "Ali Karbassi":http://karbassi.com to ca
 
 h2. To Install
 
-# Open up terminal.app
-# Change directory to where the script is located
-# Type: @sudo ./install.sh <username>@
-** Example: @sudo ./install.sh karbassi@
+# Open up terminal.app.
+# Change directory to where the script is located.
+# Type: @sudo ./install.sh <username>@.
+** Example: @sudo ./install.sh karbassi@.
+
+h2. To Uninstall
+
+# Open up terminal.app.
+# Change directory to where the script is located.
+# Type: @sudo ./uninstall.sh@.
 
 h2. Note
 
